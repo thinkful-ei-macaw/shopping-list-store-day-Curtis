@@ -1,3 +1,5 @@
+'use strict'
+
 const store = {
   items: [
     { id: cuid(), name: 'apples', checked: false },
@@ -25,6 +27,9 @@ const generateItemElement = function (item) {
         </button>
         <button class='shopping-item-delete js-item-delete'>
           <span class='button-label'>delete</span>
+        </button>
+        <button class='shopping-item-edit js-item-edit'>
+          <span class='button-label'>edit</span>
         </button>
       </div>
     </li>`;
@@ -89,6 +94,22 @@ const handleItemCheckClicked = function () {
   });
 };
 
+//function will display item name in form for user to edit
+const displayItem = function (id) {
+  const foundItem = store.items.find(item => item.id === id);
+  const name = foundItem.name;
+  $('.js-shopping-list-entry').val(name);
+  deleteListItem(id);
+
+};
+//This is the listener for the edit button
+const handleItemEdit = function () {
+$('.js-shopping-list').on('click', '.js-item-edit', event => {
+    const id = getItemIdFromElement(event.currentTarget);
+    displayItem(id);
+  });
+
+};
 const getItemIdFromElement = function (item) {
   return $(item)
     .closest('.js-item-element')
@@ -160,6 +181,7 @@ const handleShoppingList = function () {
   handleItemCheckClicked();
   handleDeleteItemClicked();
   handleToggleFilterClick();
+  handleItemEdit();
 };
 
 // when the page loads, call `handleShoppingList`
